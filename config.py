@@ -1,4 +1,4 @@
-TOKEN= '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11'
+TOKEN= "1142021914:AAG5j0_mSx7a1UA82z29geTRedv1GeIa0ik"
 import torchvision.models as models
 import torch
 from PIL import Image
