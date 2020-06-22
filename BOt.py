@@ -4,11 +4,13 @@ import os
 from neuralStyleTransfer import create_and_start
 from config import PathC, PathS
 
+if not os.path.exists('content_photos'):
+    os.makedirs('content_photos')
+if not os.path.exists('style_photos'):
+    os.makedirs('style_photos')
+
+
 bot = telebot.TeleBot(config.TOKEN)
-if not os.path.exists('content_photos'.format('fff')):
-    os.makedirs('content_photos'.format('fff'))
-if not os.path.exists('style_photos'.format('fff')):
-    os.makedirs('style_photos'.format('fff'))
 
 @bot.message_handler(content_types=["text",'photo'])
 def repeat_all_messages(message): # Название функции не играет никакой роли, в принципе
@@ -30,7 +32,7 @@ def handle_docs_photo(message):
 
         with open(src, 'wb') as new_file:
            new_file.write(downloaded_file)
-        bot.reply_to(message,"Фото добавлено")
+        bot.reply_to(message,"Фото добавлено: {name}".format(name= message.caption))
 
     except Exception as e:
         bot.reply_to(message,e )
@@ -56,4 +58,5 @@ def photo(message):
         bot.send_photo(message.chat.id, open('замок.png', 'rb'));
 
 if __name__ == '__main__':
+     print('start working...')
      bot.infinity_polling()
