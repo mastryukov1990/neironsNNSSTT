@@ -13,7 +13,7 @@ import torchvision.transforms as transforms
 from config import device
 
 
-from StyleLoss import StyleLoss
+from StyleLoss import StyleLossByParts,StyleLossAll
 from ContentLoss import ContentLoss
 from Normalization import Normalization
 
@@ -62,10 +62,10 @@ class NST:
 
   def get_style_model_and_losses(self):
         
-        if self.mode ==1:
-          Style = StyleLoss
-        if self.mode ==0:
-          Style = StyleLoss
+        if self.mode =='All':
+          Style = StyleLossAll
+        if self.mode =='by_parts':
+          Style = StyleLossByParts
         # normalization module
         self.normalization = Normalization(self.normalization_mean, self.normalization_std).to(device)
 
@@ -169,7 +169,7 @@ class NST:
 
             self.optimizer.step(closure)
 
-        # a last correction...
+
         self.input_img.data.clamp_(0, 1)
 
 
@@ -177,7 +177,7 @@ class NST:
     if not os.path.exists('samples{}'.format(self.name)):
       os.makedirs('samples{}'.format(self.name))
 
-print('ggandonemore')
+
 def imshow1(image, title=None, name='ll',figsize=(10,10)):
 
     fig,axes = plt.subplots(figsize=figsize)

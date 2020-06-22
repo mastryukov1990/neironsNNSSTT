@@ -18,13 +18,14 @@ def gram_matrix(input):
         return G.div(batch_size * h * w * f_map_num)
 
 
-class StyleLoss2(nn.Module):
-    def __init__(self, target_feature,style_weights):
-        super(StyleLoss2, self).__init__()
+class StyleLossAll(nn.Module):
 
+    def __init__(self, target_feature,style_weights):
+        super(StyleLossAll, self).__init__()
         self.targets = [gram_matrix(i) for i in target_feature]
         self.loss = F.mse_loss(self.targets[0], self.targets[0])  # to initialize with something
         self.style_weights = style_weights
+
     def forward(self, input):
         self.loss = 0
         for i,weight in zip(self.targets,self.style_weights):
@@ -34,70 +35,33 @@ class StyleLoss2(nn.Module):
         return input
 
 
-class StyleLoss1(nn.Module):
+
+
+
+
+class StyleLossByParts(nn.Module):
     def __init__(self, target_feature,weights):
-        super(StyleLoss1, self).__init__()
-        self.W = target_feature[0].size()[3]
-        self.target_feature = target_feature
-        self.target = gram_matrix(torch.div(target_feature[0][..., 0:self.W // len(target_feature)], 2)).detach()
-        self.target1 = gram_matrix(torch.div(target_feature[1][..., self.W // len(target_feature):self.W], 2)).detach()
-        self.loss = F.mse_loss(self.target, self.target)  # to initialize with something
-        self.num_t = len(target_feature)
-    def forward(self, input):
-        G = gram_matrix(input[..., 0:self.W // len(self.target_feature)])
-        G1 = gram_matrix(input[..., self.W // len(self.target_feature):self.W])
-        self.loss = F.mse_loss(G, self.target)*100000 + F.mse_loss(G1, self.target1)*100000
-        return input
-
-
-
-
-class StyleLoss(nn.Module):
-    def __init__(self, target_feature,weights):
-        super(StyleLoss, self).__init__()
+        super(StyleLossByParts, self).__init__()
         self.W = target_feature[0].size()[3]
         self.target_feature = target_feature
         self.num_t = len(target_feature)
         self.targets = [gram_matrix(torch.div(target_feature[i][..., i*self.W // len(target_feature):(i+1)*self.W // len(target_feature)], 2)).detach()
                         for i in range(self.num_t)]
         self.loss = F.mse_loss(self.targets[0], self.targets[0])  # to initialize with something
-
+        self.weights = weights
     def forward(self, input):
 
         Gs = [gram_matrix(input[..., i*self.W // self.num_t:(i+1)*self.W // self.num_t])
                         for i in range(self.num_t)]
         self.loss=0
         for i in range(self.num_t):
-            self.loss += F.mse_loss(Gs[i], self.targets[i])*100000
+            self.loss += F.mse_loss(Gs[i], self.targets[i])*self.weights[i]
         return input
 
 
 
 
-class StyleLoss1(nn.Module):
-
-
-    def __init__(self, target_feature,weights):
-        super(StyleLoss1, self).__init__()
-        self.num_p = len(target_feature)
-        self.size = target_feature[0].size()[3]
-        self.target_feature = target_feature
-        self.parts = self.create_parts_style(target_feature)
-        self.targets = [gram_matrix(input[..., 0:self.size // len(self.target_feature)]),
-                        gram_matrix(input[..., self.size// len(self.target_feature):self.size])]
-        self.loss = F.mse_loss(self.targets[0], self.targets[0])  # to initialize with something
-        self.Gs = []
-
-
-    def forward(self, input):
-        self.parts_in = self.create_parts(input)
-        self.Gs = [gram_matrix(input[..., 0:self.size // len(self.target_feature)]),
-                    gram_matrix(input[..., self.size // len(self.target_feature):self.size])]
-        for G,target in zip(self.Gs,self.targets):
-            self.loss += F.mse_loss(G,target)*100000
-
-        return input
-    def create_parts(self,input):
+def create_parts(self,input):
         parts = []
 
         for i in range(self.num_p):
@@ -105,7 +69,7 @@ class StyleLoss1(nn.Module):
 
             parts.append(input[...,t*i:t*(i+1)])
         return parts
-    def create_parts_style(self,input):
+def create_parts_style(self,input):
         parts = []
 
         for i in range(self.num_p):

@@ -34,20 +34,19 @@ setting = {'cnn': cnn, 'cnn_normalization_mean': cnn_normalization_mean,
            'cnn_normalization_std': cnn_normalization_std,
            'content_img':image_loader(Path+"замок.jpg"),
            'style_imgs': [ image_loader(Path+"вангог.jpg"),
-                           image_loader(Path+"крик.jpg"),
-                           image_loader(Path+"цвета1.jpg"),
+
 
                           ],
            'input': image_loader(Path+"замок.jpg").clone(),
            'epoches': 100,
-           'style_weights': [100000, 100000],
+           'style_weights': [100000, 100000,100000],
 
            'style_layers':
                ['conv_1', 'conv_2', 'conv_3', 'conv_4', 'conv_5', 'conv_6'],
            'name': 'Nst',
            'content_layers':['conv_1'],
            'content_weights': [1],
-           'mode': 1,
+           'mode': 'All',
            'size':imsize}
 unloader = transforms.ToPILImage() # тензор в кратинку
 
