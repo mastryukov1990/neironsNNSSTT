@@ -1,4 +1,4 @@
-TOKEN= "1142021914:AAG5j0_mSx7a1UA82z29geTRedv1GeIa0ik"
+TOKEN= '1247559782:AAEp7BbaFG6O6ztARSpTpUdxcU7O_UGHcWU'
 import torchvision.models as models
 import torch
 from PIL import Image
@@ -20,7 +20,8 @@ cnn = models.vgg19(pretrained=True).features.to(device).eval()
 cnn_normalization_mean = torch.tensor([0.485, 0.456, 0.406]).to(device)
 cnn_normalization_std = torch.tensor([0.229, 0.224, 0.225]).to(device)
 Path = "C:/Users/ASUS/Dropbox/image1/"
-
+PathS = "C:/Users/ASUS/PycharmProjects/neirons/style_photos/"
+PathC = "C:/Users/ASUS/PycharmProjects/neirons/content_photos/"
 def image_loader(image_name):
     image = Image.open(image_name)
     image = loader(image).unsqueeze(0)
