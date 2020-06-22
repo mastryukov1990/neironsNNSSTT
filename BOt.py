@@ -4,10 +4,7 @@ import os
 from neuralStyleTransfer import create_and_start
 from config import PathC, PathS
 
-if not os.path.exists('content_photos'):
-    os.makedirs('content_photos')
-if not os.path.exists('style_photos'):
-    os.makedirs('style_photos')
+
 
 
 bot = telebot.TeleBot(config.TOKEN)
