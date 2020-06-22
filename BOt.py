@@ -2,7 +2,7 @@ import config
 import telebot
 import os
 from neuralStyleTransfer import create_and_start
-
+from config import PathC, PathS
 
 bot = telebot.TeleBot(config.TOKEN)
 if not os.path.exists('content_photos'.format('fff')):
