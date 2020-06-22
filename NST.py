@@ -177,7 +177,7 @@ class NST:
     if not os.path.exists('samples{}'.format(self.name)):
       os.makedirs('samples{}'.format(self.name))
 
-print('gg')
+print('ggandonemore')
 def imshow1(image, title=None, name='ll',figsize=(10,10)):
 
     fig,axes = plt.subplots(figsize=figsize)
