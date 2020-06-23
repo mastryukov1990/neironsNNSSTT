@@ -160,7 +160,7 @@ class NST:
                     print("step {}:".format(self.step))
                     print('Style Loss : {:4f} Content Loss: {:4f}'.format(
                         style_score.item(), content_score.item()))
-                    plt.imsave('samples{}/{}_step{}.jpg'.format(self.name,"NST", str(self.step)),unloader(self.input_img.cpu().clone().squeeze(0)))
+                    #plt.imsave('samples{}/{}_step{}.jpg'.format(self.name,"NST", str(self.step)),unloader(self.input_img.cpu().clone().squeeze(0)))
          
                     self.images.append(unloader(self.input_img.cpu().clone().squeeze(0)  ).copy())
                     torch.cuda.empty_cache()

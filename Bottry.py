@@ -17,7 +17,8 @@ class BBB:
         self.style_srcs=[]
         self.content_srcs = []
         self.pic_mode = 'style'
-
+        self.num_style= 1
+        self.num_cont = 1
     def handle_docs_photo(self,message):
 
         try:
@@ -25,20 +26,26 @@ class BBB:
             downloaded_file = self.bot.download_file(file_info.file_path)
             if self.pic_mode=='style':
                 Path=self.PathS
+                src = Path + '{}.jpg'.format(self.num_style);
+
             if self.pic_mode=='cont':
                 Path=self.PathC
-            src = Path + '{}.jpg'.format(message.caption);
+                src = Path + '{}.jpg'.format(self.num_cont);
 
             with open(src, 'wb') as new_file:
                 new_file.write(downloaded_file)
-            self.bot.reply_to(message, "Фото добавлено: {name}".format(name=message.caption))
 
             if self.pic_mode=='style':
+                self.bot.reply_to(message, "Фото стиля добавлено: {name}".format(name=self.num_style))
                 if not src in self.style_srcs:
                     self.style_srcs.append(src)
+                    self.num_style += 1
             if self.pic_mode=='cont':
+                self.bot.reply_to(message, "Фото контента добавлено: {name}".format(name=self.num_cont))
+
                 if not src in self.content_srcs:
                     self.content_srcs.append(src)
+                    self.num_cont += 1
 
         except Exception as e:
             print('no')
@@ -60,9 +67,9 @@ class BBB:
     def take_photo(self,message):
         if message.content_type == 'photo':
             print(type(message.photo))
-            print(r.content_srcs)
-            print(r.style_srcs)
-            print(r.pic_mode)
+            print(self.content_srcs)
+            print(self.style_srcs)
+            print(self.pic_mode)
 
 
     def start_NST(self,message):
@@ -71,13 +78,22 @@ class BBB:
 
 
            for scr in self.style_srcs:
-                   setting['style_imgs'].append(image_loader(scr))
+                setting['style_imgs'].append(image_loader(scr))
            for scr in self.content_srcs:
                setting['content_img']=image_loader(scr)
                setting['input'] = image_loader(scr)
+               setting['contPicname'] = str(self.num_cont)
                create_and_start(setting)
-               self.bot.send_photo(message.chat.id, open('замок.png', 'rb'))
 
+               self.bot.send_photo(message.chat.id, open(setting['contPicname']+'.png', 'rb'))
+    def help(self, message):
+        if message.text == 'help':
+            self.bot.send_message(message.chat.id, '''Привет, я люблю переносить стили, готов и тебе помочь в этом. 
+                                                   Для этого: 1) пришли по одиночке фотографии стиля
+                                        2) 
+                                        Когда наберешь нужное количесвто напиши ContentPic, чтобы получить контент рисунки
+                                         3) пришли их по одиночке
+                                         4) Вбей NST и жди''')
     def photo(self,message):
         if message.text == 'NST':
             self.bot.send_photo(message.chat.id, open('замок.png', 'rb'));
@@ -105,6 +121,7 @@ class BBB:
 
 
     def repeat_all_messages(self,message):  # Название функции не играет никакой роли, в принципе
+        self.help(message)
         self.eho(message)
         self.start_NST(message)
         self.show(message)
@@ -115,12 +132,12 @@ class BBB:
         self.change_pic_mode( message)
 
 print('start')
-r = BBB(data_for_bot)
-@r.bot.message_handler(content_types=["text", 'photo'])
+mybot = BBB(data_for_bot)
+@mybot.bot.message_handler(content_types=["text", 'photo','command'])
 def repeat_all_messages(message): # Название функции не играет никакой роли, в принципе
-    r.repeat_all_messages(message)
+    mybot.repeat_all_messages(message)
 
 
 
 
-r.bot.polling()
+mybot.bot.polling()
