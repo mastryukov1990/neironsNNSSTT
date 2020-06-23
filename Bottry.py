@@ -21,8 +21,8 @@ class BBB:
         self.num_cont = 1
         self.mode = 'by_parts'
         self.start_message = '/StartT'
-        self.stylePicmode = 'StylePic'
-        self.contPicmode = 'ContPic'
+        self.stylePicmode = '/StylePic'
+        self.contPicmode = '/ContPic'
     def handle_docs_photo(self,message):
 
         try:
@@ -52,24 +52,34 @@ class BBB:
                     self.num_cont += 1
 
         except Exception as e:
-            print('no')
+            print('not_photo')
 
+    def checkworck(self,message):
+        self.bot.send_message(message.chat.id, "ВСе ок, я работаю)".format(message.text))
 
     def eho(self,message):
-        if message.content_type == 'text':
-            self.bot.send_message(message.chat.id, "ВСе ок, я работаю)({})".format(message.text))
+        if message.text == 'ok?':
+            self.checkworck(message)
+
+
     def change_mod(self,message):
         if message.text == 'All':
             self.mode = "All"
+            self.bot.send_message(message.chat.id, "Работаю в режиме{}".format(self.mode))
+
         if message.text == 'by_parts':
             self.mode = "by_parts"
+            self.bot.send_message(message.chat.id, "Работаю в режиме{}".format(self.mode))
 
     def change_pic_mode(self,message):
         if message.text == self.stylePicmode:
             self.pic_mode='style'
+            self.bot.send_message(message.chat.id, "Принимаю стиль-картинки ")
+
         if message.text == self.contPicmode:
             print('here')
             self.pic_mode='cont'
+            self.bot.send_message(message.chat.id, "Принимаю контент-картинки")
 
 
     def take_photo(self,message):
@@ -102,9 +112,9 @@ class BBB:
             self.bot.send_message(message.chat.id,
 '''Привет, я люблю переносить стили, готов и тебе помочь в этом. Для этого: 
 1) Пришли по одиночке фотографии стиля в формате jpg(можешь пприслать сколько пожелаешь но поодиночке)
-2) Когда наберешь нужное количесвто напиши ContentPic и пришли фотографии тоже в jpg, которые ты бы хотел разукрасить.
+2) Когда наберешь нужное количесвто напиши {ContentPic} и пришли фотографии тоже в jpg, которые ты бы хотел разукрасить.
  Тоже по одиночке
- 4)Пропиши  /StartT ля начала выполнения''')
+ 4)Пропиши  {StartT} ля начала выполнения'''.format(ContentPic=self.contPicmode,StartT=self.start_message))
     def photo(self,message):
         if message.text ==  self.start_message:
             self.bot.send_photo(message.chat.id, open('замок.png', 'rb'));
