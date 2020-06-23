@@ -17,12 +17,18 @@ class BBB:
         self.style_srcs=[]
         self.content_srcs = []
         self.pic_mode = 'style'
-        self.num_style= 1
-        self.num_cont = 1
-        self.mode = 'by_parts'
-        self.start_message = '/StartT'
         self.stylePicmode = '/StylePic'
         self.contPicmode = '/ContPic'
+
+        self.num_style= 1
+        self.num_cont = 1
+
+        self.mode = 'by_parts'
+        self.modeAll='/All'
+        self.modeByParst= '/by_parts'
+
+        self.start_message = '/StartT'
+
     def handle_docs_photo(self,message):
 
         try:
@@ -71,11 +77,11 @@ class BBB:
 
     def change_mod(self,message):
         print('here')
-        if message.text == 'All':
+        if message.text == '/All':
             self.mode = "All"
             self.bot.send_message(message.chat.id, "Работаю в режиме{}".format(self.mode))
 
-        if message.text == 'by_parts':
+        if message.text == '/by_parts':
             self.mode = "by_parts"
             self.bot.send_message(message.chat.id, "Работаю в режиме{}".format(self.mode))
 
@@ -122,8 +128,13 @@ class BBB:
 '''Привет, я люблю переносить стили, готов и тебе помочь в этом. Для этого: 
 1) Пришли по одиночке фотографии стиля в формате jpg(можешь пприслать сколько пожелаешь но поодиночке)
 2) Когда наберешь нужное количесвто напиши {ContentPic} и пришли фотографии тоже в jpg, которые ты бы хотел разукрасить.
- Тоже по одиночке
- 4)Пропиши  {StartT} ля начала выполнения'''.format(ContentPic=self.contPicmode,StartT=self.start_message))
+Тоже по одиночке
+3) Можешь настроить на свой вкус(попробуй их всех): \n режим работы: {All} или {by_parts}
+ 
+4)Пропиши  {StartT} ля начала выполнения'''.format(ContentPic=self.contPicmode,
+                                                   StartT=self.start_message,
+                                                   All = self.modeAll,
+                                                   by_parts=self.modeByParst))
     def photo(self,message):
         if message.text ==  self.start_message:
             self.bot.send_photo(message.chat.id, open('замок.png', 'rb'));
