@@ -4,10 +4,12 @@ from neuralStyleTransfer import create_and_start
 import os
 import matplotlib.pyplot as plt
 from NST import imshow1
-if not os.path.exists('content_photos'):
-    os.makedirs('content_photos')
-if not os.path.exists('style_photos'):
-    os.makedirs('style_photos')
+if not os.path.exists('content'):
+    os.makedirs('content')
+if not os.path.exists('content/style_photos'):
+    os.makedirs('content/style_photos')
+if not os.path.exists('content/content_photos'):
+    os.makedirs('content/content_photos')
 
 class BBB:
     def __init__(self,data_bot):
