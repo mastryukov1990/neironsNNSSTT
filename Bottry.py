@@ -14,8 +14,10 @@ class BBB:
         self.bot = telebot.TeleBot(data_bot['TOKEN'])
         self.PathS=data_bot['PathS']
         self.PathC = data_bot['PathC']
+
         self.style_srcs=[]
         self.content_srcs = []
+
         self.pic_mode = 'style'
         self.stylePicmode = '/StylePic'
         self.contPicmode = '/ContPic'
@@ -23,12 +25,14 @@ class BBB:
         self.num_style= 1
         self.num_cont = 1
 
-        self.mode = 'by_parts'
+        self.mode = 'All'
         self.modeAll='/All'
         self.modeByParst= '/by_parts'
 
         self.start_message = '/StartT'
 
+        self.prozarka_mode = 'min'
+        self.epoches = 100
     def handle_docs_photo(self,message):
 
         try:
@@ -94,6 +98,15 @@ class BBB:
             print('here')
             self.pic_mode='cont'
             self.bot.send_message(message.chat.id, "Принимаю контент-картинки")
+    def take_photo(self,message):
+        if message.text == '/min':
+            self.epoches=100
+        if message.text == '/med':
+            self.epoches=200
+        if message.text == '/max':
+            self.epoches=300
+        if message.text == '/super_max':
+            self.epoches=400
 
 
     def take_photo(self,message):
@@ -117,6 +130,9 @@ class BBB:
                setting['input'] = image_loader(scr)
                setting['contPicname'] = str(self.num_cont)
                setting['mode']= self.mode
+
+
+               setting['epoches'] = self.epoches
                create_and_start(setting)
 
                self.bot.send_photo(message.chat.id, open(setting['contPicname']+'.png', 'rb'))
@@ -130,11 +146,14 @@ class BBB:
 2) Когда наберешь нужное количесвто напиши {ContentPic} и пришли фотографии тоже в jpg, которые ты бы хотел разукрасить.
 Тоже по одиночке
 3) Можешь настроить на свой вкус(попробуй их всех): \n режим работы: {All} или {by_parts}
+степень изменения стиля: /min, /med, /max или /super_max
  
-4)Пропиши  {StartT} ля начала выполнения'''.format(ContentPic=self.contPicmode,
+4)Пропиши  {StartT} ля начала выполнения
+(Если впервый раз, то просто отправь jpg картинку)'''.format(ContentPic=self.contPicmode,
                                                    StartT=self.start_message,
                                                    All = self.modeAll,
                                                    by_parts=self.modeByParst))
+
     def photo(self,message):
         if message.text ==  self.start_message:
             self.bot.send_photo(message.chat.id, open('замок.png', 'rb'));
