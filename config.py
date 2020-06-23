@@ -8,7 +8,8 @@ import torch.nn as nn
 from StyleLoss import gram_matrix
 import torch.nn.functional as F
 import copy
-imsize = [150,150]
+size1=100
+imsize = [int(1.3*size1),int(size1)]
 
 loader = transforms.Compose([
     transforms.Resize(imsize),  # нормируем размер изображения
@@ -21,8 +22,8 @@ cnn_normalization_mean = torch.tensor([0.485, 0.456, 0.406]).to(device)
 cnn_normalization_std = torch.tensor([0.229, 0.224, 0.225]).to(device)
 Path ="C:/Users/ASUS/Dropbox/image1/"
 data_for_bot ={
-'PathS': "content/style_photos",
-'PathC' : "content/content_photos",
+'PathS': "content/style_photos/style_photo_",
+'PathC' : "content/content_photos/content_photo_",
     'TOKEN':'1247559782:AAEp7BbaFG6O6ztARSpTpUdxcU7O_UGHcWU'
 }
 def image_loader(image_name):
