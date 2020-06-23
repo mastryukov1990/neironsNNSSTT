@@ -36,12 +36,12 @@ def image_loader(image_name):
 
 setting = {'cnn': cnn, 'cnn_normalization_mean': cnn_normalization_mean,
            'cnn_normalization_std': cnn_normalization_std,
-           'content_img':image_loader('style_photos/1.jpg'),
-           'style_imgs': [ image_loader('style_photos/1.jpg'),
+           'content_img':None,
+           'style_imgs': [
 
 
                           ],
-           'input': image_loader('style_photos/1.jpg').clone(),
+           'input': None,
            'contPicname':'Замок',
            'epoches': 100,
            'style_weights': [100000, 100000,100000],
