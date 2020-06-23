@@ -31,7 +31,7 @@ class BBB:
 
         self.start_message = '/StartT'
 
-        self.prozarka_mode = 'min'
+
         self.epoches = 100
     def handle_docs_photo(self,message):
 
@@ -98,15 +98,19 @@ class BBB:
             print('here')
             self.pic_mode='cont'
             self.bot.send_message(message.chat.id, "Принимаю контент-картинки")
-    def take_photo(self,message):
+    def prozar(self,message):
         if message.text == '/min':
             self.epoches=100
+            self.bot.send_message(message.chat.id, self.epoches)
         if message.text == '/med':
             self.epoches=200
+            self.bot.send_message(message.chat.id, self.epoches)
         if message.text == '/max':
             self.epoches=300
+            self.bot.send_message(message.chat.id, self.epoches)
         if message.text == '/super_max':
             self.epoches=400
+            self.bot.send_message(message.chat.id, self.epoches)
 
 
     def take_photo(self,message):
@@ -188,6 +192,7 @@ class BBB:
             self.mode = 'by_parts'
             self.start_message = '/StartT'
 
+
     def repeat_all_messages(self,message):  # Название функции не играет никакой роли, в принципе
         self.help(message)
         self.eho(message)
@@ -200,7 +205,7 @@ class BBB:
         self.change_pic_mode( message)
         self.change_mod(message)
         self.start_again( message)
-
+        self.prozar(message)
 print('start')
 mybot = BBB(data_for_bot)
 @mybot.bot.message_handler(content_types=["text", 'photo','command'])
