@@ -17,7 +17,7 @@ from StyleLoss import StyleLossByParts,StyleLossAll
 from ContentLoss import ContentLoss
 from Normalization import Normalization
 
-
+print(device)
 unloader = transforms.ToPILImage() # тензор в кратинку  
 
 
