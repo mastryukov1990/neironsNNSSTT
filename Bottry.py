@@ -19,6 +19,10 @@ class BBB:
         self.pic_mode = 'style'
         self.num_style= 1
         self.num_cont = 1
+        self.mode = 'by_parts'
+        self.start_message = '/StartT'
+        self.stylePicmode = 'StylePic'
+        self.contPicmode = 'ContPic'
     def handle_docs_photo(self,message):
 
         try:
@@ -53,13 +57,17 @@ class BBB:
 
     def eho(self,message):
         if message.content_type == 'text':
-            self.bot.send_message(message.chat.id, "ВСе ок, я работаю)")
-
+            self.bot.send_message(message.chat.id, "ВСе ок, я работаю)({})".format(message.text))
+    def change_mod(self,message):
+        if message.text == 'All':
+            self.mode = "All"
+        if message.text == 'by_parts':
+            self.mode = "by_parts"
 
     def change_pic_mode(self,message):
-        if message.text == 'StylePic':
+        if message.text == self.stylePicmode:
             self.pic_mode='style'
-        if message.text == 'ContentPic':
+        if message.text == self.contPicmode:
             print('here')
             self.pic_mode='cont'
 
@@ -73,7 +81,7 @@ class BBB:
 
 
     def start_NST(self,message):
-        if message.text == 'NST':
+        if message.text == self.start_message:
            setting['style_imgs']=[]
 
 
@@ -83,19 +91,20 @@ class BBB:
                setting['content_img']=image_loader(scr)
                setting['input'] = image_loader(scr)
                setting['contPicname'] = str(self.num_cont)
+               setting['mode']= self.mode
                create_and_start(setting)
 
                self.bot.send_photo(message.chat.id, open(setting['contPicname']+'.png', 'rb'))
     def help(self, message):
-        if message.text == 'help':
-            self.bot.send_message(message.chat.id, '''Привет, я люблю переносить стили, готов и тебе помочь в этом. 
-                                                   Для этого: 1) пришли по одиночке фотографии стиля
-                                        2) 
-                                        Когда наберешь нужное количесвто напиши ContentPic, чтобы получить контент рисунки
-                                         3) пришли их по одиночке
-                                         4) Вбей NST и жди''')
+        if message.text == '/help' or message.text == '/start' :
+            self.bot.send_message(message.chat.id,
+'''Привет, я люблю переносить стили, готов и тебе помочь в этом. Для этого: 
+1) Пришли по одиночке фотографии стиля в формате jpg(можешь пприслать сколько пожелаешь но поодиночке)
+2) Когда наберешь нужное количесвто напиши ContentPic и пришли фотографии тоже в jpg, которые ты бы хотел разукрасить.
+ Тоже по одиночке
+ 4)Пропиши  /StartT ля начала выполнения''')
     def photo(self,message):
-        if message.text == 'NST':
+        if message.text ==  self.start_message:
             self.bot.send_photo(message.chat.id, open('замок.png', 'rb'));
 
 
@@ -118,7 +127,15 @@ class BBB:
             'Click on the currency of choice:',
             reply_markup=keyboard
         )
-
+    def start_again(self,message):
+        if message.text=='end':
+            self.style_srcs = []
+            self.content_srcs = []
+            self.pic_mode = 'style'
+            self.num_style = 1
+            self.num_cont = 1
+            self.mode = 'by_parts'
+            self.start_message = '/StartT'
 
     def repeat_all_messages(self,message):  # Название функции не играет никакой роли, в принципе
         self.help(message)
@@ -130,14 +147,14 @@ class BBB:
         self.handle_docs_photo(message)
         #self.exchange_command(message)
         self.change_pic_mode( message)
+        self.change_mod(message)
+        self.start_again( message)
 
 print('start')
 mybot = BBB(data_for_bot)
 @mybot.bot.message_handler(content_types=["text", 'photo','command'])
 def repeat_all_messages(message): # Название функции не играет никакой роли, в принципе
     mybot.repeat_all_messages(message)
-
-
 
 
 mybot.bot.polling()

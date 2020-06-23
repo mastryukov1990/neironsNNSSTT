@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 
 import torchvision.transforms as transforms
-from config import device
+from config import device,setting
 
 
 from StyleLoss import StyleLossByParts,StyleLossAll
