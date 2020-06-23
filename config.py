@@ -8,7 +8,7 @@ import torch.nn as nn
 from StyleLoss import gram_matrix
 import torch.nn.functional as F
 import copy
-size1=100
+size1=400
 imsize = [int(1.3*size1),int(size1)]
 
 loader = transforms.Compose([

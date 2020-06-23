@@ -6,10 +6,8 @@ import matplotlib.pyplot as plt
 from NST import imshow1
 if not os.path.exists('content'):
     os.makedirs('content')
-if not os.path.exists('content/style_photos'):
-    os.makedirs('content/style_photos')
-if not os.path.exists('content/content_photos'):
-    os.makedirs('content/content_photos')
+if not os.path.exists('style_photos'):
+    os.makedirs('style_photos')
 
 class BBB:
     def __init__(self,data_bot):
@@ -45,12 +43,16 @@ class BBB:
                 print('here')
 
             if self.pic_mode=='style':
-                self.bot.reply_to(message, "Фото стиля добавлено: {name}".format(name=self.num_style))
+                self.bot.reply_to(message,
+                                  '''Фото стиля добавлено: {name} \nМожешь добавить еще, \nили начать добавлять контент-картинки {mode}'''.format(name=self.num_style,mode=self.contPicmode))
                 if not src in self.style_srcs:
                     self.style_srcs.append(src)
                     self.num_style += 1
             if self.pic_mode=='cont':
-                self.bot.reply_to(message, "Фото контента добавлено: {name}".format(name=self.num_cont))
+                self.bot.reply_to(message, '''Фото контента добавлено: {name}\nМожешь добавить еще, \nдополнить стиль-картинки {mode},\n и даже запустить волшебную трансформацию {start}
+                                   '''.format(name=self.num_cont,
+                                              mode= self.stylePicmode,
+                                              start=self.start_message))
 
                 if not src in self.content_srcs:
                     self.content_srcs.append(src)
