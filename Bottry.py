@@ -153,7 +153,8 @@ class BBB:
 степень изменения стиля: /min, /med, /max или /super_max
  
 4)Пропиши  {StartT} ля начала выполнения
-(Если впервый раз, то просто отправь jpg картинку)'''.format(ContentPic=self.contPicmode,
+(Если впервый раз, то просто отправь jpg картинку)
+5) А если захочешь все сбросить и попробывать другие картинки просто напиши /end'''.format(ContentPic=self.contPicmode,
                                                    StartT=self.start_message,
                                                    All = self.modeAll,
                                                    by_parts=self.modeByParst))
@@ -183,7 +184,7 @@ class BBB:
             reply_markup=keyboard
         )
     def start_again(self,message):
-        if message.text=='end':
+        if message.text=='/end':
             self.style_srcs = []
             self.content_srcs = []
             self.pic_mode = 'style'
@@ -191,7 +192,7 @@ class BBB:
             self.num_cont = 1
             self.mode = 'by_parts'
             self.start_message = '/StartT'
-
+            self.bot.send_message(message.chat.id, 'Все обновилость!!! Начни по-новой /start')
 
     def repeat_all_messages(self,message):  # Название функции не играет никакой роли, в принципе
         self.help(message)
