@@ -33,6 +33,7 @@ class BBB:
 
         self.standatrsize= 100
         self.size = [100,100]
+        self.K=1.1
 
         self.epoches = 100
     def handle_docs_photo(self,message):
@@ -122,19 +123,19 @@ class BBB:
 
     def chooosesize(self,message):
         if message.text == '/super_minS':
-            self.size=[self.standatrsize,self.standatrsize*1.3]
+            self.size=[self.standatrsize,self.standatrsize*self.K]
             self.bot.send_message(message.chat.id,'Ну и качетсво ты выбрал{}'.format(self.size))
         if message.text == '/minS':
-            self.size=[self.standatrsize*2,2*self.standatrsize*1.3]
+            self.size=[self.standatrsize*2,2*self.standatrsize*self.K]
             self.bot.send_message(message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.size))
         if message.text == '/medS':
-            self.size=[3*self.standatrsize,3*self.standatrsize*1.3]
+            self.size=[3*self.standatrsize,3*self.standatrsize*self.K]
             self.bot.send_message(message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.size))
         if message.text == '/maxS':
-            self.size=[4*self.standatrsize,4*self.standatrsize*1.3]
+            self.size=[4*self.standatrsize,4*self.standatrsize*self.K]
             self.bot.send_message(message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.size))
         if message.text == '/super_maxS':
-            self.size=[5*self.standatrsize,5*self.standatrsize*1.3]
+            self.size=[5*self.standatrsize,5*self.standatrsize*self.K]
             self.bot.send_message(message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.size))
 
     def take_photo(self,message):
