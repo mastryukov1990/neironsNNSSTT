@@ -46,7 +46,7 @@ class BBB:
 
     def eho(self,message):
         if message.content_type == 'text':
-            self.bot.send_message(message.chat.id, message.text)
+            self.bot.send_message(message.chat.id, "ВСе ок, я работаю)")
 
 
     def change_pic_mode(self,message):
@@ -76,7 +76,7 @@ class BBB:
                setting['content_img']=image_loader(scr)
                setting['input'] = image_loader(scr)
                create_and_start(setting)
-
+               self.bot.send_photo(message.chat.id, open('замок.png', 'rb'))
 
     def photo(self,message):
         if message.text == 'NST':
@@ -109,9 +109,9 @@ class BBB:
         self.start_NST(message)
         self.show(message)
         self.take_photo(message)
-        self.photo(message)
+        #self.photo(message)
         self.handle_docs_photo(message)
-        self.exchange_command(message)
+        #self.exchange_command(message)
         self.change_pic_mode( message)
 
 print('start')

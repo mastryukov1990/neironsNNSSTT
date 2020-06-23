@@ -9,5 +9,5 @@ def create_and_start(setting):
     fig,axes = plt.subplots(figsize=(10,10))
     axes.axis('off')
     plt.imshow(Neiron.images[40])
-    fig.savefig('замок')
+    fig.savefig(setting['contPicname'])
     return Neiron

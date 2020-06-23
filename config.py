@@ -42,6 +42,7 @@ setting = {'cnn': cnn, 'cnn_normalization_mean': cnn_normalization_mean,
 
                           ],
            'input': image_loader(Path+"замок.jpg").clone(),
+           'contPicname':'Замок',
            'epoches': 100,
            'style_weights': [100000, 100000,100000],
 
