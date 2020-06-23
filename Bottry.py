@@ -31,6 +31,8 @@ class BBB:
 
         self.start_message = '/StartT'
 
+        self.standatrsize= 100
+        self.size = [100,100]
 
         self.epoches = 100
     def handle_docs_photo(self,message):
@@ -98,20 +100,42 @@ class BBB:
             print('here')
             self.pic_mode='cont'
             self.bot.send_message(message.chat.id, "Принимаю контент-картинки")
+
+
     def prozar(self,message):
+        if message.text == '/super_min':
+            self.epoches=50
+            self.bot.send_message(message.chat.id, self.epoches)
         if message.text == '/min':
-            self.epoches=100
+            self.epoches=90
             self.bot.send_message(message.chat.id, self.epoches)
         if message.text == '/med':
-            self.epoches=200
+            self.epoches=180
             self.bot.send_message(message.chat.id, self.epoches)
         if message.text == '/max':
-            self.epoches=300
+            self.epoches=270
             self.bot.send_message(message.chat.id, self.epoches)
         if message.text == '/super_max':
-            self.epoches=400
+            self.epoches=360
             self.bot.send_message(message.chat.id, self.epoches)
 
+
+    def chooosesize(self,message):
+        if message.text == '/super_minS':
+            self.size=[self.standatrsize,self.standatrsize*1.3]
+            self.bot.send_message(message.chat.id,'Ну и качетсво ты выбрал{}'.format(self.size))
+        if message.text == '/minS':
+            self.size=[self.standatrsize*2,2*self.standatrsize*1.3]
+            self.bot.send_message(message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.size))
+        if message.text == '/medS':
+            self.size=[3*self.standatrsize,3*self.standatrsize*1.3]
+            self.bot.send_message(message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.size))
+        if message.text == '/maxS':
+            self.size=[4*self.standatrsize,4*self.standatrsize*1.3]
+            self.bot.send_message(message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.size))
+        if message.text == '/super_maxS':
+            self.size=[5*self.standatrsize,5*self.standatrsize*1.3]
+            self.bot.send_message(message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.size))
 
     def take_photo(self,message):
         if message.content_type == 'photo':
@@ -126,16 +150,16 @@ class BBB:
         if message.text == self.start_message:
            setting['style_imgs']=[]
 
-
+           setting['size'] = self.size
            for scr in self.style_srcs:
-                setting['style_imgs'].append(image_loader(scr))
+                setting['style_imgs'].append(image_loader(scr,self.size))
            for scr in self.content_srcs:
-               setting['content_img']=image_loader(scr)
-               setting['input'] = image_loader(scr)
+               setting['content_img']=image_loader(scr,self.size)
+               setting['input'] = image_loader(scr,self.size)
                setting['contPicname'] = str(self.num_cont)
                setting['mode']= self.mode
 
-
+               setting['size'] = self.size
                setting['epoches'] = self.epoches
                create_and_start(setting)
 
@@ -207,6 +231,7 @@ class BBB:
         self.change_mod(message)
         self.start_again( message)
         self.prozar(message)
+        self.chooosesize( message)
 print('start')
 mybot = BBB(data_for_bot)
 @mybot.bot.message_handler(content_types=["text", 'photo','command'])

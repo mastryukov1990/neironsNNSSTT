@@ -8,13 +8,14 @@ import torch.nn as nn
 from StyleLoss import gram_matrix
 import torch.nn.functional as F
 import copy
-size1=400
+size1=100
 imsize = [int(1.3*size1),int(size1)]
-
-loader = transforms.Compose([
-    transforms.Resize(imsize),  # нормируем размер изображения
-    transforms.CenterCrop(imsize),
-    transforms.ToTensor()])
+def create_loader(imsize):
+    loader = transforms.Compose([
+        transforms.Resize(imsize),  # нормируем размер изображения
+        transforms.CenterCrop(imsize),
+        transforms.ToTensor()])
+    return loader
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 cnn = models.vgg19(pretrained=True).features.to(device).eval()
@@ -26,8 +27,10 @@ data_for_bot ={
 'PathC' : "content/content_photos/content_photo_",
     'TOKEN':'1247559782:AAEp7BbaFG6O6ztARSpTpUdxcU7O_UGHcWU'
 }
-def image_loader(image_name):
+def image_loader(image_name,size):
     image = Image.open(image_name)
+    size = [int(size[0]),int(size[1])]
+    loader = create_loader(size)
     image = loader(image).unsqueeze(0)
     return image.to(device, torch.float)
 
