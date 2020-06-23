@@ -30,14 +30,17 @@ class BBB:
             downloaded_file = self.bot.download_file(file_info.file_path)
             if self.pic_mode=='style':
                 Path=self.PathS
+                print('here')
                 src = Path + '{}.jpg'.format(self.num_style);
 
             if self.pic_mode=='cont':
                 Path=self.PathC
+
                 src = Path + '{}.jpg'.format(self.num_cont);
 
             with open(src, 'wb') as new_file:
                 new_file.write(downloaded_file)
+                print('here')
 
             if self.pic_mode=='style':
                 self.bot.reply_to(message, "Фото стиля добавлено: {name}".format(name=self.num_style))
@@ -63,6 +66,7 @@ class BBB:
 
 
     def change_mod(self,message):
+        print('here')
         if message.text == 'All':
             self.mode = "All"
             self.bot.send_message(message.chat.id, "Работаю в режиме{}".format(self.mode))
@@ -91,6 +95,7 @@ class BBB:
 
 
     def start_NST(self,message):
+        print('here')
         if message.text == self.start_message:
            setting['style_imgs']=[]
 
