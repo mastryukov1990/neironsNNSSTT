@@ -195,18 +195,18 @@ class BBB:
 
 
     def exchange_command(self,message):
-        keyboard = telebot.types.InlineKeyboardMarkup()
-        keyboard.row(  telebot.types.InlineKeyboardButton('USD', callback_data='get-USD')
-        )
-        keyboard.row(
-            telebot.types.InlineKeyboardButton('EUR', callback_data='get-EUR'),
-            telebot.types.InlineKeyboardButton('RUR', callback_data='get-RUR')
-        )
+
+        button_hi = telebot.types.KeyboardButton('Привет! 👋')
+
+        greet_kb = telebot.types.ReplyKeyboardMarkup()
+        greet_kb.add(button_hi)
+        inline_btn_1 = telebot.types.InlineKeyboardButton('Первая кнопка!', callback_data='button1')
+        inline_kb1 = telebot.types.InlineKeyboardMarkup().add(inline_btn_1)
 
         self.bot.send_message(
             message.chat.id,
-            'Click on the currency of choice:',
-            reply_markup=keyboard
+            'i do not know for what',
+            reply_markup=inline_kb1
         )
     def start_again(self,message):
         if message.text=='/end':
@@ -233,4 +233,6 @@ class BBB:
         self.start_again( message)
         self.prozar(message)
         self.chooosesize( message)
+        #self.exchange_command( message)
+
 print('start')
