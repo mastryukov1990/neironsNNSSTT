@@ -58,7 +58,7 @@ class BBB:
             if self.pic_mode=='cont':
                 Path=self.PathC+chatid
                 Path = 'content/content_photos/' + chatid + '/cont_'
-                src = Path + '{}.jpg'.format(str(self.num_cont)+str(message.chat.id));
+                src = Path + '{}.jpg'.format(str(self.num_cont));
 
             with open(src, 'wb') as new_file:
                 new_file.write(downloaded_file)
@@ -165,10 +165,11 @@ class BBB:
            setting['size'] = self.size
            for scr in self.style_srcs:
                 setting['style_imgs'].append(image_loader(scr,self.size))
-           for scr in self.content_srcs:
+           for scr,num in zip(self.content_srcs,range(len(self.content_srcs))):
+               num+=1
                setting['content_img']=image_loader(scr,self.size)
                setting['input'] = image_loader(scr,self.size)
-               setting['contPicname'] = 'content/final_photos/'+chatid+'/'+str(self.num_cont)
+               setting['contPicname'] = 'content/final_photos/'+chatid+'/'+str(num)
                setting['mode']= self.mode
 
                setting['size'] = self.size
@@ -249,7 +250,7 @@ class BBB:
             self.num_style = 1
             self.num_cont = 1
             self.mode = 'by_parts'
-            self.start_message = '/StartT'
+
             self.bot.send_message(message.chat.id, 'Все обновилость!!! Начни по-новой /start')
 
     def repeat_all_messages(self,message):  # Название функции не играет никакой роли, в принципе
