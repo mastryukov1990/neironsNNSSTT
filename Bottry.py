@@ -165,7 +165,7 @@ class BBB:
                create_and_start(setting)
 
                self.bot.send_photo(message.chat.id, open(setting['contPicname']+'.png', 'rb'))
-
+           self.bot.send_message(message.chat.id,' еще хочу твоих фотографий, \n тыкни /end и повтори ')
     def foridiot(self, message):
         if message.text == '/start' or message.text == '/help':
             self.bot.send_message(message.chat.id,
