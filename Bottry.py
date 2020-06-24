@@ -1,6 +1,7 @@
 import telebot
 from config import data_for_bot,setting, image_loader, imshow
 from neuralStyleTransfer import create_and_start
+import numpy as np
 import os
 import matplotlib.pyplot as plt
 from NST import imshow1
@@ -156,27 +157,33 @@ class BBB:
 
 
     def start_NST(self,message):
-        print('here')
+        print('hereNST')
+        local_setting = setting
         if message.text == self.start_message:
-           setting['style_imgs']=[]
+           print('hereNST')
+           local_setting['style_imgs'] = []
            chatid = str(message.chat.id)
            if not os.path.exists('content/final_photos/' + chatid):
                os.makedirs('content/final_photos/' + chatid)
-           setting['size'] = self.size
+           local_setting ['size'] = self.size
+           local_scr = 'content/content_photos/'+chatid+'/'
+           local_scr = [local_scr + pic for pic in os.listdir(local_scr) ]
+           print(local_scr)
            for scr in self.style_srcs:
-                setting['style_imgs'].append(image_loader(scr,self.size))
+               local_setting ['style_imgs'].append(image_loader(scr,self.size))
            for scr,num in zip(self.content_srcs,range(len(self.content_srcs))):
-               num+=1
-               setting['content_img']=image_loader(scr,self.size)
-               setting['input'] = image_loader(scr,self.size)
-               setting['contPicname'] = 'content/final_photos/'+chatid+'/'+str(num)
-               setting['mode']= self.mode
+                if scr in  local_scr:
+                   num+=1
+                   local_setting ['content_img']=image_loader(scr,self.size)
+                   local_setting ['input'] = image_loader(scr,self.size)
+                   local_setting ['contPicname'] = 'content/final_photos/'+chatid+'/'+str(num)
+                   local_setting ['mode']= self.mode
 
-               setting['size'] = self.size
-               setting['epoches'] = self.epoches
-               create_and_start(setting)
+                   local_setting ['size'] = self.size
+                   local_setting ['epoches'] = self.epoches
+                   create_and_start(local_setting )
 
-               self.bot.send_photo(message.chat.id, open(setting['contPicname']+'.png', 'rb'))
+                   self.bot.send_photo(message.chat.id, open(local_setting ['contPicname']+'.png', 'rb'))
            self.bot.send_message(message.chat.id,' еще хочу твоих фотографий, \n тыкни /end и повтори ')
     def foridiot(self, message):
         if message.text == '/start' or message.text == '/help':
@@ -269,5 +276,7 @@ class BBB:
         self.chooosesize( message)
         self.foridiot(message)
         #self.exchange_command( message)
+print("Все папки и файлы:", os.listdir('content/content_photos'))
+t =['content/content_photos/'+i for i in os.listdir('content/content_photos')]
 
-print('start')
+print(t )

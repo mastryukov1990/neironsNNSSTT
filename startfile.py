@@ -8,3 +8,5 @@ def start():
 
 
     mybot.bot.polling()
+    print('start')
+start()
