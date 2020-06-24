@@ -1,4 +1,4 @@
-from Bottry import BBB
+from NewBot import BBB
 from config import data_for_bot
 def start():
     mybot = BBB(data_for_bot)
