@@ -4,11 +4,15 @@ from neuralStyleTransfer import create_and_start
 import os
 import matplotlib.pyplot as plt
 from NST import imshow1
+import os
 if not os.path.exists('content'):
     os.makedirs('content')
-if not os.path.exists('style_photos'):
-    os.makedirs('style_photos')
-
+if not os.path.exists('content/style_photos'):
+    os.makedirs('content/style_photos')
+if not os.path.exists('content/content_photos'):
+    os.makedirs('content/content_photos')
+if not os.path.exists('content/final_photos'):
+    os.makedirs('content/final_photos')
 class BBB:
     def __init__(self,data_bot):
         self.bot = telebot.TeleBot(data_bot['TOKEN'])
@@ -41,15 +45,20 @@ class BBB:
         try:
             file_info = self.bot.get_file(message.photo[len(message.photo) - 1].file_id)
             downloaded_file = self.bot.download_file(file_info.file_path)
+            chatid=str(message.chat.id)
+            if not os.path.exists('content/content_photos/'+chatid):
+                os.makedirs('content/content_photos/'+chatid)
+            if not os.path.exists('content/style_photos/'+chatid):
+                os.makedirs('content/style_photos/'+chatid)
             if self.pic_mode=='style':
-                Path=self.PathS
+                Path='content/style_photos/'+chatid+'/style_'
                 print('here')
-                src = Path + '{}.jpg'.format(str(self.num_style)+str(message.chat.id));
+                src = Path + '{}.jpg'.format(str(self.num_style));
 
             if self.pic_mode=='cont':
-                Path=self.PathC
-
-                src = Path + '{}.jpg'.format(self.num_cont);
+                Path=self.PathC+chatid
+                Path = 'content/content_photos/' + chatid + '/cont_'
+                src = Path + '{}.jpg'.format(str(self.num_cont)+str(message.chat.id));
 
             with open(src, 'wb') as new_file:
                 new_file.write(downloaded_file)
@@ -157,7 +166,7 @@ class BBB:
            for scr in self.content_srcs:
                setting['content_img']=image_loader(scr,self.size)
                setting['input'] = image_loader(scr,self.size)
-               setting['contPicname'] = str(self.num_cont)
+               setting['contPicname'] = 'content/final_photos/'+str(self.num_cont)
                setting['mode']= self.mode
 
                setting['size'] = self.size
