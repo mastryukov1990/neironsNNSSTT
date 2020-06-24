@@ -33,7 +33,7 @@ class BBB:
         self.modeAll='/All'
         self.modeByParst= '/by_parts'
 
-        self.start_message = '/StartT'
+        self.start_message = '/run'
 
         self.standatrsize= 100
         self.size = [300,300]
@@ -159,14 +159,16 @@ class BBB:
         print('here')
         if message.text == self.start_message:
            setting['style_imgs']=[]
-
+           chatid = str(message.chat.id)
+           if not os.path.exists('content/final_photos/' + chatid):
+               os.makedirs('content/final_photos/' + chatid)
            setting['size'] = self.size
            for scr in self.style_srcs:
                 setting['style_imgs'].append(image_loader(scr,self.size))
            for scr in self.content_srcs:
                setting['content_img']=image_loader(scr,self.size)
                setting['input'] = image_loader(scr,self.size)
-               setting['contPicname'] = 'content/final_photos/'+str(self.num_cont)
+               setting['contPicname'] = 'content/final_photos/'+chatid+'/'+str(self.num_cont)
                setting['mode']= self.mode
 
                setting['size'] = self.size
