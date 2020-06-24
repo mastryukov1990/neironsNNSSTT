@@ -171,18 +171,34 @@ class BBB:
         if message.text == '/help' or message.text == '/start' :
             self.bot.send_message(message.chat.id,
 '''Привет, я люблю переносить стили, готов и тебе помочь в этом. Для этого: 
-1) Пришли по одиночке фотографии стиля в формате jpg(можешь пприслать сколько пожелаешь но поодиночке)
+
+1) Пришли по одиночке фотографии стиля в формате jpg(можешь прислать сколько пожелаешь, но поодиночке)
+
+
 2) Когда наберешь нужное количесвто напиши {ContentPic} и пришли фотографии тоже в jpg, которые ты бы хотел разукрасить.
 Тоже по одиночке
-3) Можешь настроить на свой вкус(попробуй их всех): \n режим работы: {All} или {by_parts}
+
+
+
+ 
+3) Можете настроить на свой вкус(попробуй их всех): \n режим работы: {All} или {by_parts}
+ 
+качество:
+/super_minS, /minS, /medS, /maxS или /super_maxS !!!
+ 
 степень изменения стиля: /min, /med, /max или /super_max
+
  
 4)Пропиши  {StartT} ля начала выполнения
-(Если впервый раз, то просто отправь jpg картинку)
+
+
+
 5) А если захочешь все сбросить и попробывать другие картинки просто напиши /end'''.format(ContentPic=self.contPicmode,
                                                    StartT=self.start_message,
                                                    All = self.modeAll,
                                                    by_parts=self.modeByParst))
+        if message.text == '/help' or message.text == '/start':
+                self.bot.send_message(message.chat.id,'Если впервый раз, то просто отправь jpg картинку :)')
 
     def photo(self,message):
         if message.text ==  self.start_message:
