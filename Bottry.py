@@ -166,13 +166,17 @@ class BBB:
            if not os.path.exists('content/final_photos/' + chatid):
                os.makedirs('content/final_photos/' + chatid)
            local_setting ['size'] = self.size
-           local_scr = 'content/content_photos/'+chatid+'/'
-           local_scr = [local_scr + pic for pic in os.listdir(local_scr) ]
-           print(local_scr)
+           local_scr_c= 'content/content_photos/'+chatid+'/'
+           local_scr_c = [local_scr_c + pic for pic in os.listdir(local_scr_c) ]
+           print(local_scr_c)
+           local_scr_s = 'content/style_photos/' + chatid + '/'
+           local_scr_s = [local_scr_s + pic for pic in os.listdir(local_scr_s)]
+           print(local_scr_s)
            for scr in self.style_srcs:
-               local_setting ['style_imgs'].append(image_loader(scr,self.size))
+               if scr in local_scr_s:
+                local_setting ['style_imgs'].append(image_loader(scr,self.size))
            for scr,num in zip(self.content_srcs,range(len(self.content_srcs))):
-                if scr in  local_scr:
+                if scr in  local_scr_c:
                    num+=1
                    local_setting ['content_img']=image_loader(scr,self.size)
                    local_setting ['input'] = image_loader(scr,self.size)
