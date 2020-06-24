@@ -32,8 +32,8 @@ class BBB:
         self.start_message = '/StartT'
 
         self.standatrsize= 100
-        self.size = [100,100]
-        self.K=1.1
+        self.size = [300,300]
+        self.K=0.8
 
         self.epoches = 100
     def handle_docs_photo(self,message):
@@ -44,7 +44,7 @@ class BBB:
             if self.pic_mode=='style':
                 Path=self.PathS
                 print('here')
-                src = Path + '{}.jpg'.format(self.num_style);
+                src = Path + '{}.jpg'.format(str(self.num_style)+str(message.chat.id));
 
             if self.pic_mode=='cont':
                 Path=self.PathC
@@ -57,7 +57,7 @@ class BBB:
 
             if self.pic_mode=='style':
                 self.bot.reply_to(message,
-                                  '''Фото стиля добавлено: {name} \nМожешь добавить еще, \nили начать добавлять контент-картинки {mode}'''.format(name=self.num_style,mode=self.contPicmode))
+                                  '''Фото стиля добавлено: {name} \nМожешь добавить еще, \nили начать добавлять контент-картинки(эти картинки я и буду менять) {mode}'''.format(name=self.num_style,mode=self.contPicmode))
                 if not src in self.style_srcs:
                     self.style_srcs.append(src)
                     self.num_style += 1
@@ -166,11 +166,18 @@ class BBB:
 
                self.bot.send_photo(message.chat.id, open(setting['contPicname']+'.png', 'rb'))
 
+    def foridiot(self, message):
+        if message.text == '/start' or message.text == '/help':
+            self.bot.send_message(message.chat.id,
+''' Привет, я люблю переносить стили и готов тебе помочь:
+1)  просто пришли мне стиль-картинку в jpg формате:) 
+(с этой картинки я заберу стиль и перенесу на другую)
+2)  Подробнее /more ''')
 
     def help(self, message):
-        if message.text == '/help' or message.text == '/start' :
+        if message.text == '/more'  :
             self.bot.send_message(message.chat.id,
-'''Привет, я люблю переносить стили, готов и тебе помочь в этом. Для этого: 
+'''Подробнее: 
 
 1) Пришли по одиночке фотографии стиля в формате jpg(можешь прислать сколько пожелаешь, но поодиночке)
 
@@ -197,8 +204,7 @@ class BBB:
                                                    StartT=self.start_message,
                                                    All = self.modeAll,
                                                    by_parts=self.modeByParst))
-        if message.text == '/help' or message.text == '/start':
-                self.bot.send_message(message.chat.id,'Если впервый раз, то просто отправь jpg картинку :)')
+
 
     def photo(self,message):
         if message.text ==  self.start_message:
@@ -249,6 +255,7 @@ class BBB:
         self.start_again( message)
         self.prozar(message)
         self.chooosesize( message)
+        self.foridiot(message)
         #self.exchange_command( message)
 
 print('start')
