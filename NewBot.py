@@ -2,6 +2,7 @@ import telebot
 from config import data_for_bot, setting, image_loader, imshow
 from neuralStyleTransfer import create_and_start
 import copy
+import shutil
 import numpy as np
 import os
 import matplotlib.pyplot as plt
@@ -219,37 +220,35 @@ class BBB:
         if message.text == '/start' or message.text == '/help':
             self.bot.send_message(message.chat.id,
                                   ''' Привет, я люблю переносить стили и готов тебе помочь:
-                                  1)  просто пришли мне стиль-картинку в jpg формате:) 
-                                  (с этой картинки я заберу стиль и перенесу на другую)
-                                  2)  Подробнее /more ''')
+1)  просто пришли мне стиль-картинку в jpg формате:) 
+(с этой картинки я заберу стиль и перенесу на другую)
+2)  Подробнее /more ''')
 
     def help(self, message):
         if message.text == '/more':
             self.bot.send_message(message.chat.id,
-                                  '''Подробнее: 
+'''Подробнее: 
                                   
-                                  1) Пришли по одиночке фотографии стиля в формате jpg(можешь прислать сколько пожелаешь, но поодиночке)
+1) Пришли по одиночке фотографии стиля в формате jpg(можешь прислать сколько пожелаешь, но поодиночке)
                                   
                                   
-                                  2) Когда наберешь нужное количесвто напиши {ContentPic} и пришли фотографии тоже в jpg, которые ты бы хотел разукрасить.
+2) Когда наберешь нужное количесвто напиши {ContentPic} и пришли фотографии тоже в jpg, которые ты бы хотел разукрасить.
                                   Тоже по одиночке
                                   
                                   
                                   
                                   
-                                  3) Можете настроить на свой вкус(попробуй их всех): \n режим работы: {All} или {by_parts}
+3) Можете настроить на свой вкус(попробуй их всех): \n режим работы: {All} или {by_parts} качество:
+/super_minS, /minS, /medS, /maxS или /super_maxS !!!
                                   
-                                  качество:
-                                  /super_minS, /minS, /medS, /maxS или /super_maxS !!!
-                                  
-                                  степень изменения стиля: /min, /med, /max или /super_max
+степень изменения стиля: /min, /med, /max или /super_max
                                   
                                   
-                                  4)Пропиши  {StartT} ля начала выполнения
+4)Пропиши  {StartT} ля начала выполнения
                                   
                                   
                                   
-                                  5) А если захочешь все сбросить и попробывать другие картинки просто напиши /end'''.format(
+5) А если захочешь все сбросить и попробывать другие картинки просто напиши /end'''.format(
                                       ContentPic=self.contPicmode,
                                       StartT=self.start_message,
                                       All=self.modeAll,
@@ -282,6 +281,12 @@ class BBB:
         chatid =  str(message.chat.id)
         if message.text == '/end':
             self.userdict[chatid]=copy.deepcopy(self.example)
+            if  os.path.exists('content/content_photos/' + chatid):
+                shutil.rmtree('content/content_photos/' + chatid)
+            if  os.path.exists('content/style_photos/' + chatid):
+                shutil.rmtree('content/style_photos/' + chatid)
+            if  os.path.exists('content/final_photos/' + chatid):
+                shutil.rmtree('content/final_photos/' + chatid)
             self.bot.send_message(message.chat.id, 'Все обновилость!!! Начни по-новой /start')
 
     def repeat_all_messages(self, message):  # Название функции не играет никакой роли, в принципе
@@ -305,5 +310,6 @@ class BBB:
 
 print("Все папки и файлы:", os.listdir('content/content_photos'))
 t = ['content/content_photos/' + i for i in os.listdir('content/content_photos')]
+print( os.path.exists('content/style_photos/' + "494878116/"))
 
 print(t)
