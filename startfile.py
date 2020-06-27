@@ -15,7 +15,7 @@ def start():
         chatid = str(c.message.chat.id)
         mybot.chooosesizeC(c)
         mybot.prozarC(c)
-
+        mybot.change_modC(c)
 
     mybot.bot.polling()
 start()

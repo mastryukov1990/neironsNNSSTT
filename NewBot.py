@@ -40,14 +40,15 @@ class BBB:
         self.num_cont = 1
 
         self.mode = 'All'
-        self.modeAll = 'Магия со всех картинок'
-        self.modeByParst = 'Магия по частям'
+        self.modeAll = 'Все вместе'
+        self.modeByParst = 'По частям'
         self.start_message = 'Трансформация'
 
         self.standatrsize = 100
         self.size = [300, 300]
         self.K = 0.8
 
+        self.menumode = 'Главное меню'
         self.epoches = 100
 
         self.example={
@@ -60,7 +61,8 @@ class BBB:
             'size' : [300, 300],
             'epoches':100,
             'K' : 0.8,
-            'transfer': 0
+            'transfer': 0,
+            'menumode':'Главное меню'
         }
         self.userdict = {}
     def handle_docs_photo(self, message):
@@ -232,6 +234,15 @@ class BBB:
             self.userdict[chatid]['size'] = [5 * self.standatrsize, 5 * self.standatrsize * self.K]
             self.bot.send_message(c.message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.userdict[chatid]['size']))
 
+    def change_modC(self,c):
+        chatid = str(c.message.chat.id)
+        if c.data == self.modeAll:
+            self.userdict[chatid]['mode'] = "All"
+            self.bot.send_message(c.message.chat.id, "Работаю в режиме  {}".format('Преобразую целиком'))
+
+        if c.data == self.modeByParst:
+            self.userdict[chatid]['mode'] = "by_parts"
+            self.bot.send_message(c.message.chat.id, "Работаю в режиме  {}".format('Преобразую по частям'))
 
     def take_photo(self, message):
         if message.content_type == 'photo':
@@ -319,21 +330,42 @@ class BBB:
                                       All=self.modeAll,
                                       by_parts=self.modeByParst))
 
+    def change_mode(self,message):
+        chatid = str(message.chat.id)
+        if message.text =='Главное меню':
+            self.userdict[chatid]['menumode'] = 'Главное меню'
+            self.bot.send_message(message.chat.id, 'Главное меню')
+
+        if message.text =='Настройки':
+            self.userdict[chatid]['menumode'] = 'Настройки'
+
+            self.bot.send_message(message.chat.id, 'Настройки')
+
 
     def exchange_command(self, message):
 
-
+        chatid = str(message.chat.id)
         greet_kb = telebot.types.ReplyKeyboardMarkup()
         self.params = [self.start_message, self.modeByParst,self.modeAll,self.stylePicmode,self.contPicmode]
 
         button = [telebot.types.KeyboardButton(i) for i in self.params]
-        greet_kb.row("Помощь")
-        greet_kb.row(button[1],button[2])
-        greet_kb.row(button[3], button[4])
-        greet_kb.row('Изменить качество')
-        greet_kb.row('Изменить степень трансформации')
-        greet_kb.row(button[0])
-        greet_kb.row('Начать заново')
+
+
+        if self.userdict[chatid]['menumode'] =='Главное меню':
+            greet_kb.row(button[3], button[4])
+            greet_kb.row('Настройки')
+            greet_kb.row(button[0])
+            greet_kb.row('Начать заново')
+
+        if self.userdict[chatid]['menumode'] == 'Настройки':
+            greet_kb.row("Помощь")
+            greet_kb.row('Режим трансформации')
+            greet_kb.row('Изменить качество')
+            greet_kb.row('Изменить степень трансформации')
+            greet_kb.row('Главное меню')
+
+
+
         self.bot.send_message(
             message.chat.id,
             'я работаю',
@@ -366,11 +398,17 @@ class BBB:
                                          ['средняя', 'm'],
                                          ['сильная', 'M'],
                                          ['очень сильная', 'SM']])
-            self.bot.send_message(message.chat.id, "ВЫБЕРИТЕ ТРАНСФОРМАЦИЮ", reply_markup=key2)
+            self.bot.send_message(message.chat.id, "ВЫБЕРИТЕ СТЕПЕНЬ ТРАНСФОРМАЦИИ", reply_markup=key2)
+        if message.text == 'Режим трансформации':
+            key3 = self.create_bottons([[self.modeAll, self.modeAll],
+                                         [self.modeByParst, self.modeByParst],
+                                         ])
+            self.bot.send_message(message.chat.id, "ВЫБЕРИТЕ РЕЖИМ ТРАНСФОРМАЦИИ", reply_markup=key3)
 
     def busy(self,message):
         chatid = message.chat.id
         self.bot.send_message(chatid, 'Я пока занят подсчетом')
+
     def repeat_all_messages(self, message):  # Название функции не играет никакой роли, в принципе
         chatid = str(message.chat.id)
         self.eho(message)
@@ -389,7 +427,9 @@ class BBB:
             self.prozar(message)
             #self.chooosesize(message)
             self.foridiot(message)
-            self.exchange_command( message)
+            self.change_mode( message)
+            self.exchange_command(message)
+
         else:
             self.busy(message)
 
