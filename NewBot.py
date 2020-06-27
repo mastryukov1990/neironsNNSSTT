@@ -267,7 +267,9 @@ class BBB:
                     create_and_start(local_setting)
 
                     self.bot.send_photo(message.chat.id, open(local_setting['contPicname'] + '.png', 'rb'))
-            self.bot.send_message(message.chat.id, ' еще хочу твоих фотографий, \n тыкни /end и повтори ')
+            self.bot.send_message(message.chat.id,
+'''Ура,получилось!!! 
+Молодец, держишь уровень, как всегда говно''')
             self.userdict[chatid]['transfer'] = 0
     def create_bottons(self,data):
         key = types.InlineKeyboardMarkup()
@@ -276,13 +278,14 @@ class BBB:
             but_1 = types.InlineKeyboardButton(text=text, callback_data=call)
             key.add(but_1)
         return  key
+
+
     def foridiot(self, message):
         if message.text == '/start' or message.text == '/help':
             self.bot.send_message(message.chat.id,
-                                  ''' Привет, я люблю переносить стили и готов тебе помочь:
-1)  просто пришли мне стиль-картинку в jpg формате:) 
-(с этой картинки я заберу стиль и перенесу на другую)
-2)  Подробнее /more ''')
+''' Привет, я люблю переносить стили и готов тебе помочь:
+просто пришли мне стиль-картинку в jpg формате:) 
+(с этой картинки я заберу стиль и перенесу на другую)''')
 
     def help(self, message):
         if message.text == '/more':
@@ -314,13 +317,6 @@ class BBB:
                                       All=self.modeAll,
                                       by_parts=self.modeByParst))
 
-    def photo(self, message):
-        if message.text == self.start_message:
-            self.bot.send_photo(message.chat.id, open('замок.png', 'rb'));
-
-    def show(self, message):
-        if message.text == 'покажи':
-            self.bot.send_photo(message.chat.id, open(self.style_srcs[0], 'rb'));
 
     def exchange_command(self, message):
 
@@ -329,20 +325,22 @@ class BBB:
         self.params = [self.start_message, self.modeByParst,self.modeAll,self.stylePicmode,self.contPicmode]
 
         button = [telebot.types.KeyboardButton(i) for i in self.params]
-        greet_kb.row(button[0])
+
         greet_kb.row(button[1],button[2])
         greet_kb.row(button[3], button[4])
         greet_kb.row('Изменить качество')
         greet_kb.row('Изменить степень трансформации')
+        greet_kb.row(button[0])
+        greet_kb.row('Начать заново')
         self.bot.send_message(
             message.chat.id,
-            'Окей',
+            'я работаю',
             reply_markup=greet_kb
         )
 
     def start_again(self, message):
         chatid =  str(message.chat.id)
-        if message.text == '/end':
+        if message.text == 'Начать заново':
             self.userdict[chatid]=copy.deepcopy(self.example)
             if  os.path.exists('content/content_photos/' + chatid):
                 shutil.rmtree('content/content_photos/' + chatid)
@@ -350,7 +348,7 @@ class BBB:
                 shutil.rmtree('content/style_photos/' + chatid)
             if  os.path.exists('content/final_photos/' + chatid):
                 shutil.rmtree('content/final_photos/' + chatid)
-            self.bot.send_message(message.chat.id, 'Все обновилость!!! Начни по-новой /start')
+            self.bot.send_message(message.chat.id, 'Все обновилость!!! Начни по-новой ')
 
     def inline(self,message):
         if message.text == 'Изменить качество':
@@ -367,6 +365,7 @@ class BBB:
                                          ['сильная', 'M'],
                                          ['очень сильная', 'SM']])
             self.bot.send_message(message.chat.id, "ВЫБЕРИТЕ ТРАНСФОРМАЦИЮ", reply_markup=key2)
+
     def busy(self,message):
         chatid = message.chat.id
         self.bot.send_message(chatid, 'Я пока занят подсчетом')
@@ -377,7 +376,7 @@ class BBB:
             self.help(message)
             self.inline(message)
             self.start_NST(message)
-            self.show(message)
+
             self.take_photo(message)
             # self.photo(message)
             self.handle_docs_photo(message)
