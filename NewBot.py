@@ -45,7 +45,7 @@ class BBB:
         self.start_message = 'Трансформация'
 
         self.standatrsize = 100
-        self.size = [300, 300]
+        self.size = [300, 240]
         self.K = 0.8
 
         self.menumode = 'Главное меню'
