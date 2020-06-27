@@ -42,7 +42,7 @@ class BBB:
         self.mode = 'All'
         self.modeAll = 'Магия со всех картинок'
         self.modeByParst = 'Магия по частям'
-        self.start_message = 'Волшебство'
+        self.start_message = 'Трансформация'
 
         self.standatrsize = 100
         self.size = [300, 300]
@@ -285,34 +285,36 @@ class BBB:
             self.bot.send_message(message.chat.id,
 ''' Привет, я люблю переносить стили и готов тебе помочь:
 просто пришли мне стиль-картинку в jpg формате:) 
-(с этой картинки я заберу стиль и перенесу на другую)''')
+(с этой картинки я заберу стиль и перенесу на другую)
+Также у тебя есть кнопки, подробнее в при нажатии "Помощь"''')
 
     def help(self, message):
-        if message.text == '/more':
+        if message.text == 'Помощь':
             self.bot.send_message(message.chat.id,
-'''Подробнее: 
+'''Алгоритм успешной работы: 
                                   
-1) Пришли по одиночке фотографии стиля в формате jpg(можешь прислать сколько пожелаешь, но поодиночке)
-                                  
-                                  
-2) Когда наберешь нужное количесвто напиши {ContentPic} и пришли фотографии тоже в jpg, которые ты бы хотел разукрасить.
-                                  Тоже по одиночке
+1) Пришли по одиночке фотографии-стиля в формате jpg(можешь прислать сколько пожелаешь, но поодиночке)
                                   
                                   
-                                  
-                                  
-3) Можете настроить на свой вкус(попробуй их всех): \n режим работы: {All} или {by_parts} качество:
-/super_minS, /minS, /medS, /maxS или /super_maxS !!!
-                                  
-степень изменения стиля: /min, /med, /max или /super_max
-                                  
-                                  
-4)Пропиши  {StartT} ля начала выполнения
+2) Когда наберешь нужное количесвто, нажми "{ContentPic}" и пришли фотографии тоже в jpg, которые ты бы хотел разукрасить.
+Тоже по одиночке( если захочешь прислать еще "стиля" то нажми "{StylePic}")
                                   
                                   
                                   
-5) А если захочешь все сбросить и попробывать другие картинки просто напиши /end'''.format(
+                                  
+3) Можете настроить на свой вкус(попробуй их всех): \n\nРежим работы: "{All}" или "{by_parts}" 
+\n\nКачество: "Изменить качество " !!!
+                                  
+\n\nСтепень изменения стиля: "Изменить сепень Трансформации
+                                  
+                                  
+4)Нажми "{StartT}" для начала выполнения
+                                  
+                                  
+                                  
+5) А если захочешь все сбросить и попробывать другие картинки просто нажми "Начать заново"'''.format(
                                       ContentPic=self.contPicmode,
+                                      StylePic=self.stylePicmode,
                                       StartT=self.start_message,
                                       All=self.modeAll,
                                       by_parts=self.modeByParst))
@@ -325,7 +327,7 @@ class BBB:
         self.params = [self.start_message, self.modeByParst,self.modeAll,self.stylePicmode,self.contPicmode]
 
         button = [telebot.types.KeyboardButton(i) for i in self.params]
-
+        greet_kb.row("Помощь")
         greet_kb.row(button[1],button[2])
         greet_kb.row(button[3], button[4])
         greet_kb.row('Изменить качество')
