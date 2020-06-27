@@ -1,4 +1,5 @@
 import telebot
+from telebot import types
 from config import data_for_bot, setting, image_loader, imshow
 from neuralStyleTransfer import create_and_start
 import copy
@@ -32,16 +33,16 @@ class BBB:
         self.content_srcs = []
 
         self.pic_mode = 'style'
-        self.stylePicmode = '/StylePic'
-        self.contPicmode = '/ContPic'
+        self.stylePicmode = 'Стиль-картинки'
+        self.contPicmode = 'Контент-картинки'
 
         self.num_style = 1
         self.num_cont = 1
 
         self.mode = 'All'
-        self.modeAll = '/All'
-        self.modeByParst = '/by_parts'
-        self.start_message = '/run'
+        self.modeAll = 'Магия со всех картинок'
+        self.modeByParst = 'Магия по частям'
+        self.start_message = 'Волшебство'
 
         self.standatrsize = 100
         self.size = [300, 300]
@@ -58,7 +59,8 @@ class BBB:
             'mode' : 'All',
             'size' : [300, 300],
             'epoches':100,
-            'K' : 0.8
+            'K' : 0.8,
+            'transfer': 0
         }
         self.userdict = {}
     def handle_docs_photo(self, message):
@@ -117,11 +119,11 @@ class BBB:
 
     def change_mod(self, message):
         chatid =  str(message.chat.id)
-        if message.text == '/All':
+        if message.text == self.modeAll:
             self.userdict[chatid]['mode'] = "All"
             self.bot.send_message(message.chat.id, "Работаю в режиме{}".format(self.userdict[chatid]['mode'] ))
 
-        if message.text == '/by_parts':
+        if message.text == self.modeByParst:
             self.userdict[chatid]['mode'] = "by_parts"
             self.bot.send_message(message.chat.id, "Работаю в режиме{}".format(self.userdict[chatid]['mode'] ))
 
@@ -158,6 +160,32 @@ class BBB:
         if message.text == '/super_max':
             self.userdict[chatid]['epoches'] = 360
             self.bot.send_message(message.chat.id, self.userdict[chatid]['epoches'])
+        self.quality = []
+
+    def prozarC(self,c):
+            chatid = str(c.message.chat.id)
+            pathid = c.message.chat.id
+            if c.data == 'ss':
+                self.userdict[chatid]['epoches'] = 50
+                self.bot.send_message(pathid, self.userdict[chatid]['epoches'])
+
+            if c.data == 's':
+                self.userdict[chatid]['epoches'] = 90
+                self.bot.send_message(pathid, self.userdict[chatid]['epoches'])
+
+            if c.data == 'm':
+                self.userdict[chatid]['epoches'] = 180
+                self.bot.send_message(pathid, self.userdict[chatid]['epoches'])
+
+            if c.data == 'M':
+                self.userdict[chatid]['epoches'] = 270
+                self.bot.send_message(pathid, self.userdict[chatid]['epoches'])
+
+            if c.data == 'SM':
+                self.userdict[chatid]['epoches'] = 360
+                self.bot.send_message(pathid, self.userdict[chatid]['epoches'])
+            self.quality = []
+
 
     def chooosesize(self, message):
         chatid =  str(message.chat.id)
@@ -181,6 +209,30 @@ class BBB:
             self.userdict[chatid]['size'] = [5 * self.standatrsize, 5 * self.standatrsize * self.K]
             self.bot.send_message(message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.userdict[chatid]['size']))
 
+
+    def chooosesizeC(self, c):
+        chatid =  str(c.message.chat.id)
+        if c.data == 'ssS':
+            self.userdict[chatid]['size'] = [self.standatrsize, self.standatrsize * self.K]
+            self.bot.send_message(c.message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.userdict[chatid]['size']))
+
+        if c.data == 'sS':
+            self.userdict[chatid]['size'] = [self.standatrsize * 2, 2 * self.standatrsize * self.K]
+            self.bot.send_message(c.message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.userdict[chatid]['size']))
+
+        if c.data == 'mS':
+            self.userdict[chatid]['size'] = [3 * self.standatrsize, 3 * self.standatrsize * self.K]
+            self.bot.send_message(c.message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.userdict[chatid]['size']))
+
+        if c.data == 'MS':
+            self.userdict[chatid]['size'] = [4 * self.standatrsize, 4 * self.standatrsize * self.K]
+            self.bot.send_message(c.message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.userdict[chatid]['size']))
+
+        if c.data == 'SMS':
+            self.userdict[chatid]['size'] = [5 * self.standatrsize, 5 * self.standatrsize * self.K]
+            self.bot.send_message(c.message.chat.id, 'Ну и качетсво ты выбрал{}'.format(self.userdict[chatid]['size']))
+
+
     def take_photo(self, message):
         if message.content_type == 'photo':
             print(type(message.photo))
@@ -195,6 +247,7 @@ class BBB:
             print('hereNST')
             local_setting['style_imgs'] = []
             chatid = str(message.chat.id)
+            self.userdict[chatid]['transfer']=1
             if not os.path.exists('content/final_photos/' + chatid):
                 os.makedirs('content/final_photos/' + chatid)
 
@@ -215,7 +268,14 @@ class BBB:
 
                     self.bot.send_photo(message.chat.id, open(local_setting['contPicname'] + '.png', 'rb'))
             self.bot.send_message(message.chat.id, ' еще хочу твоих фотографий, \n тыкни /end и повтори ')
+            self.userdict[chatid]['transfer'] = 0
+    def create_bottons(self,data):
+        key = types.InlineKeyboardMarkup()
+        for text,call in data:
 
+            but_1 = types.InlineKeyboardButton(text=text, callback_data=call)
+            key.add(but_1)
+        return  key
     def foridiot(self, message):
         if message.text == '/start' or message.text == '/help':
             self.bot.send_message(message.chat.id,
@@ -264,17 +324,20 @@ class BBB:
 
     def exchange_command(self, message):
 
-        button_hi = telebot.types.KeyboardButton('Привет! 👋')
 
         greet_kb = telebot.types.ReplyKeyboardMarkup()
-        greet_kb.add(button_hi)
-        inline_btn_1 = telebot.types.InlineKeyboardButton('Первая кнопка!', callback_data='button1')
-        inline_kb1 = telebot.types.InlineKeyboardMarkup().add(inline_btn_1)
+        self.params = [self.start_message, self.modeByParst,self.modeAll,self.stylePicmode,self.contPicmode]
 
+        button = [telebot.types.KeyboardButton(i) for i in self.params]
+        greet_kb.row(button[0])
+        greet_kb.row(button[1],button[2])
+        greet_kb.row(button[3], button[4])
+        greet_kb.row('Изменить качество')
+        greet_kb.row('Изменить степень трансформации')
         self.bot.send_message(
             message.chat.id,
-            'i do not know for what',
-            reply_markup=inline_kb1
+            'Окей',
+            reply_markup=greet_kb
         )
 
     def start_again(self, message):
@@ -289,23 +352,46 @@ class BBB:
                 shutil.rmtree('content/final_photos/' + chatid)
             self.bot.send_message(message.chat.id, 'Все обновилость!!! Начни по-новой /start')
 
+    def inline(self,message):
+        if message.text == 'Изменить качество':
+            key1 = self.create_bottons([['очень низкое', 'ssS'],
+                                         ['низкое', 'sS'],
+                                         ['среднее', 'mS'],
+                                         ['хорошее', 'MS'],
+                                         ['отличное', 'SMS']])
+            self.bot.send_message(message.chat.id, "ВЫБЕРИТЕ КАЧЕСТВО", reply_markup=key1)
+        if message.text == 'Изменить степень трансформации':
+            key2 = self.create_bottons([['очень слабая', 'ss'],
+                                         ['слабая', 's'],
+                                         ['средняя', 'm'],
+                                         ['сильная', 'M'],
+                                         ['очень сильная', 'SM']])
+            self.bot.send_message(message.chat.id, "ВЫБЕРИТЕ ТРАНСФОРМАЦИЮ", reply_markup=key2)
+    def busy(self,message):
+        chatid = message.chat.id
+        self.bot.send_message(chatid, 'Я пока занят подсчетом')
     def repeat_all_messages(self, message):  # Название функции не играет никакой роли, в принципе
+        chatid = str(message.chat.id)
         self.eho(message)
-        self.help(message)
+        if not self.userdict[chatid]['transfer']:
+            self.help(message)
+            self.inline(message)
+            self.start_NST(message)
+            self.show(message)
+            self.take_photo(message)
+            # self.photo(message)
+            self.handle_docs_photo(message)
+            # self.exchange_command(message)
+            self.change_pic_mode(message)
+            self.change_mod(message)
+            self.start_again(message)
+            self.prozar(message)
+            #self.chooosesize(message)
+            self.foridiot(message)
+            self.exchange_command( message)
+        else:
+            self.busy(message)
 
-        self.start_NST(message)
-        self.show(message)
-        self.take_photo(message)
-        # self.photo(message)
-        self.handle_docs_photo(message)
-        # self.exchange_command(message)
-        self.change_pic_mode(message)
-        self.change_mod(message)
-        self.start_again(message)
-        self.prozar(message)
-        self.chooosesize(message)
-        self.foridiot(message)
-        # self.exchange_command( message)
 
 
 print("Все папки и файлы:", os.listdir('content/content_photos'))
