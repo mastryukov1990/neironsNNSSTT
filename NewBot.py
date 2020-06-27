@@ -121,7 +121,7 @@ class BBB:
         chatid =  str(message.chat.id)
         if message.text == self.modeAll:
             self.userdict[chatid]['mode'] = "All"
-            self.bot.send_message(message.chat.id, "Работаю в режиме{}".format('Преобразую целиком')
+            self.bot.send_message(message.chat.id, "Работаю в режиме{}".format('Преобразую целиком'))
 
         if message.text == self.modeByParst:
             self.userdict[chatid]['mode'] = "by_parts"
