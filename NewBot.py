@@ -287,7 +287,7 @@ class BBB:
                     local_setting['style_imgs']=[]
             self.bot.send_message(message.chat.id,
 '''Ура,получилось!!! 
-Молодец, держишь уровень, как всегда говно''')
+Молодец, держишь уровень, как всегда ''')
             self.userdict[chatid]['transfer'] = 0
     def create_bottons(self,data):
         key = types.InlineKeyboardMarkup()
