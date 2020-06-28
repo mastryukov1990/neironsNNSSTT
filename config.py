@@ -12,8 +12,9 @@ size1=100
 imsize = [int(1.3*size1),int(size1)]
 def create_loader(imsize):
     loader = transforms.Compose([
-        transforms.Resize(imsize),  # нормируем размер изображения
+        transforms.Resize(imsize),
         transforms.CenterCrop(imsize),
+          # нормируем размер изображения
         transforms.ToTensor()])
     return loader
 
@@ -27,12 +28,22 @@ data_for_bot ={
 'PathC' : "content/content_photos/content_photo_",
     'TOKEN':'1247559782:AAEp7BbaFG6O6ztARSpTpUdxcU7O_UGHcWU'
 }
-def image_loader(image_name,size):
+batch_size = 32
+workers =1
+def image_loader(image_name,size,type='style'):
     image = Image.open(image_name)
-    size = [int(size[0]),int(size[1])]
-    loader = create_loader(size)
-    image = loader(image).unsqueeze(0)
-    return image.to(device, torch.float)
+    if type =='cont':
+        sizec = [int(size[0]),int(size[1])]
+        loader = create_loader(sizec)
+        image = loader(image).unsqueeze(0)
+        print(sizec)
+        return image.to(device, torch.float)
+    else:
+        size = [int(size[0]), int(size[1])]
+        loader = create_loader(size)
+        print(size)
+        image = loader(image).unsqueeze(0)
+        return image.to(device, torch.float)
 
 
 

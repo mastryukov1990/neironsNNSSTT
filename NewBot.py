@@ -4,6 +4,7 @@ from config import data_for_bot, setting, image_loader, imshow
 from neuralStyleTransfer import create_and_start
 import copy
 import shutil
+from PIL import Image
 import numpy as np
 import os
 import matplotlib.pyplot as plt
@@ -262,22 +263,28 @@ class BBB:
             if not os.path.exists('content/final_photos/' + chatid):
                 os.makedirs('content/final_photos/' + chatid)
 
-            for scr in self.userdict[chatid]['style_srcs']:
-                    local_setting['style_imgs'].append(image_loader(scr, self.userdict[chatid]['size']))
+
 
             for scr, num in zip(self.userdict[chatid]['content_srcs'], range(len(self.userdict[chatid]['content_srcs']))):
 
                     num += 1
-                    local_setting['content_img'] = image_loader(scr, self.userdict[chatid]['size'])
-                    local_setting['input'] = image_loader(scr, self.userdict[chatid]['size'])
+
+                    s = Image.open(scr).size
+                    self.userdict[chatid]['size']= [self.userdict[chatid]['size'][0],int(self.userdict[chatid]['size'][0]*s[0]/s[1])]
+
+                    local_setting['content_img']= image_loader(scr, self.userdict[chatid]['size'])
+                    local_setting['input']= image_loader(scr, self.userdict[chatid]['size'])
                     local_setting['contPicname'] = 'content/final_photos/' + chatid + '/' + str(num)
                     local_setting['mode'] = self.userdict[chatid]['mode']
+                    for scr in self.userdict[chatid]['style_srcs']:
+                        local_setting['style_imgs'].append(image_loader(scr, self.userdict[chatid]['size']))
 
                     local_setting['size'] = self.userdict[chatid]['size']
                     local_setting['epoches'] = self.userdict[chatid]['epoches']
                     create_and_start(local_setting)
 
                     self.bot.send_photo(message.chat.id, open(local_setting['contPicname'] + '.png', 'rb'))
+                    local_setting['style_imgs']=[]
             self.bot.send_message(message.chat.id,
 '''Ура,получилось!!! 
 Молодец, держишь уровень, как всегда говно''')
