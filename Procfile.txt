@@ -1,1 +1,1 @@
-bot: python startfile.py
+web: python startfile.py
