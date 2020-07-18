@@ -45,6 +45,7 @@ class NST:
         self.content_img = setting['content_img']
         self.style_imgs = setting['style_imgs']
         self.input_img = setting['content_img'].clone()
+
         self.epoches = setting['epoches']
         self.step = 0
         self.mode = setting['mode']
